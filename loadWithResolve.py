@@ -49,7 +49,6 @@ def start_database(series_path_list, app):
     # app.processEvents()
 
     # Load series from series_path_list
-    print (series_path_list)
     series_list = []
     for series_path in series_path_list:
         series_path = series_path if os.path.isdir(series_path) \
@@ -313,7 +312,7 @@ class loadJsonSeriesDialog(QtWidgets.QDialog):
 
         self.ui = Ui_loadJsonSeriesDialog()
         self.ui.setupUi(self)
-        self.counter = 5
+        self.counter = 0
         self.fileList = []
         self.exec_()
 
@@ -325,9 +324,32 @@ class loadJsonSeriesDialog(QtWidgets.QDialog):
             else:
                 number = (self.sender().objectName())[-1]
                 getattr(self.ui, 'loadLineEdit_'+str(self.counter)).setText(str(fileName[0]))
+                self.fileList[int(number)] = str(fileName[0])
 
-        self.fileList.append(str(fileName[0]))
-        #self.output = str(fileName[0])
+        if fileName != None:
+
+            #first series has been loaded
+            if (self.sender().objectName() == 'loadSeriesButton'):
+                self.ui.loadLineEdit.setText(str(fileName[0]))
+                if (len(self.fileList) > 0):
+                    self.fileList[0] = str(fileName[0])
+                else:
+                    self.fileList.append(str(fileName[0]))
+            
+            #additional series being loaded
+            else:
+                number = (self.sender().objectName())[-1]
+                getattr(self.ui, 'loadLineEdit_'+str(number)).setText(str(fileName[0]))
+                number = int(number)
+
+                #second series: number = 1
+                #len = 1, number = 1
+                if (len(self.fileList) > number):
+                    #index of 1 is set
+                    self.fileList[int(number)] = str(fileName[0])
+                else:
+                    self.fileList.append(str(fileName[0]))
+
 
     def addSeries(self):
         self.counter += 1
@@ -342,22 +364,19 @@ class loadJsonSeriesDialog(QtWidgets.QDialog):
         getattr(self.ui, 'loadSeriesButton'+str(self.counter)).setObjectName('loadSeriesButton'+str(self.counter))
         getattr(self.ui, 'loadSeriesButton'+str(self.counter)).clicked.connect(self.loadSeries)
 
-        self.ui.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 381, 281+(30*(self.counter - 5))))
-        self.resize(400, 300 + (30*(self.counter - 5)))
+        self.ui.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 381, 281+(30*(self.counter))))
+        self.resize(400, 300 + (30*(self.counter)))
 
-        self.ui.verticalLayout_3.addLayout(getattr(self.ui, 'horizontalLayout_'+str(self.counter)))
+        self.ui.verticalLayout_3.addLayout(getattr(self.ui, 'horizontalLayout_'+str(self.counter+5)))
 
 
 
     def startMainWindow(self):
-        if (len(self.fileList) > 1):
-            alignSelection = MultipleSeriesDialog(self.fileList)
+        for i in range (0, len(self.fileList)):
+            if (len(self.fileList[i]) == 0):
+                self.fileList.pop(i)
 
-            if (alignSelection.result() == 0):
-                pass
-            elif (alignSelection.result() == 1):
-                newFileList = alignSelection.returnFileList()
-                self.fileList = newFileList
+        self.fileList = self.fileList
 
         self.close()
 
@@ -420,7 +439,7 @@ class Ui_loadJsonSeriesDialog(object):
     def retranslateUi(self, loadJsonSeriesDialog):
         _translate = QtCore.QCoreApplication.translate
         loadJsonSeriesDialog.setWindowTitle(_translate("loadJsonSeriesDialog", "pyRECONSTRUCT"))
-        self.welcomeLabel.setText(_translate("loadJsonSeriesDialog", "Please select the series used in this .json file. Import the series in the same order used originally."))
+        self.welcomeLabel.setText(_translate("loadJsonSeriesDialog", "Please select the series used in this .json file."))
         self.addSeriesButton.setText(_translate("loadJsonSeriesDialog", "Add Series..."))
         self.loadSeriesButton.setText(_translate("loadJsonSeriesDialog", "Load Series..."))
         self.cancelButton.setText(_translate("loadJsonSeriesDialog", "Cancel"))
@@ -439,14 +458,33 @@ class loadDialog(QtWidgets.QDialog):
     def loadSeries(self):
         fileName = QtWidgets.QFileDialog.getOpenFileName(self, "Open Series", "/home/",
                                                          "Series File (*.ser)")
+        
+        #a file name has been inputted
         if fileName != None:
+
+            #first series has been loaded
             if (self.sender().objectName() == 'loadSeriesButton'):
                 self.ui.loadLineEdit.setText(str(fileName[0]))
+                if (len(self.fileList) > 0):
+                    self.fileList[0] = str(fileName[0])
+                else:
+                    self.fileList.append(str(fileName[0]))
+            
+            #additional series being loaded
             else:
                 number = (self.sender().objectName())[-1]
-                getattr(self.ui, 'loadLineEdit_'+str(self.counter)).setText(str(fileName[0]))
+                getattr(self.ui, 'loadLineEdit_'+str(number)).setText(str(fileName[0]))
+                number = int(number)
+                number -= 5
 
-        self.fileList.append(str(fileName[0]))
+                #second series: number = 1
+                #len = 2, number = 1
+                if (len(self.fileList) > number):
+                    #index of 1 is set
+                    self.fileList[int(number)] = str(fileName[0])
+                else:
+                    self.fileList.append(str(fileName[0]))
+
 
     def addSeries(self):
         self.counter += 1
@@ -469,13 +507,20 @@ class loadDialog(QtWidgets.QDialog):
 
     def startMainWindow(self):
         if (len(self.fileList) > 1):
-            alignSelection = MultipleSeriesDialog(self.fileList)
 
+            for i in range (0, len(self.fileList)):
+                if (len(self.fileList[i]) == 0):
+                    self.fileList.pop(i)
+
+
+            alignSelection = MultipleSeriesDialog(self.fileList)
             if (alignSelection.result() == 0):
                 pass
             elif (alignSelection.result() == 1):
                 self.fileList = alignSelection.returnFileList()
-        self.close()
+
+
+        self.accept()
 
 
 class Ui_MultipleSeriesDialog(object):
@@ -1542,21 +1587,32 @@ def startLoadDialogs():
 
     initialWindow = RestoreDialog()
 
+    #not restoring from JSON
     if (initialWindow.restoreBool == False):
         loadSeries = loadDialog()
-        fileList = loadSeries.fileList
-        if len(fileList) == 0:
+
+        if (loadSeries.result() == 0):
             app.quit()
         else:
-            for i in range (0, len(fileList)):
-                if len (fileList[i]) == 0:
-                    fileList.pop(i)
-            jsonData = start_database(fileList, app)
+            #fileList from series
+            fileList = loadSeries.fileList
+            if len(fileList) == 0:
+                app.quit()
+            else:
+                for i in range (0, len(fileList)):
+                    if len (fileList[i]) == 0:
+                        fileList.pop(i)
+                jsonData = start_database(fileList, app)
 
+    #restoring from JSON
     elif (len(initialWindow.returnFileList()) > 0):
         jsonList =  (initialWindow.returnFileList())
         loadSeries = loadJsonSeriesDialog()
         fileList = loadSeries.fileList
+
+        if len(fileList) == 0:
+            app.quit()
+
         for i in range (0, len(fileList)):
             if len (fileList[i]) == 0:
                 fileList.pop(i)
