@@ -300,7 +300,7 @@ class Ui_loadDialog(object):
 
     def retranslateUi(self, loadDialog):
         _translate = QtCore.QCoreApplication.translate
-        loadDialog.setWindowTitle(_translate("loadDialog", "Dialog"))
+        loadDialog.setWindowTitle(_translate("loadDialog", "pyRECONSTRUCT"))
         self.welcomeLabel.setText(_translate("loadDialog", "Welcome to pyRECONSTRUCT! Please select a series."))
         self.addSeriesButton.setText(_translate("loadDialog", "Add Series..."))
         self.loadSeriesButton.setText(_translate("loadDialog", "Load Series..."))
@@ -419,7 +419,7 @@ class Ui_loadJsonSeriesDialog(object):
 
     def retranslateUi(self, loadJsonSeriesDialog):
         _translate = QtCore.QCoreApplication.translate
-        loadJsonSeriesDialog.setWindowTitle(_translate("loadJsonSeriesDialog", "Dialog"))
+        loadJsonSeriesDialog.setWindowTitle(_translate("loadJsonSeriesDialog", "pyRECONSTRUCT"))
         self.welcomeLabel.setText(_translate("loadJsonSeriesDialog", "Please select the series used in this .json file. Import the series in the same order used originally."))
         self.addSeriesButton.setText(_translate("loadJsonSeriesDialog", "Add Series..."))
         self.loadSeriesButton.setText(_translate("loadJsonSeriesDialog", "Load Series..."))
@@ -523,7 +523,7 @@ class Ui_MultipleSeriesDialog(object):
 
     def retranslateUi(self, MultipleSeriesDialog):
         _translate = QtCore.QCoreApplication.translate
-        MultipleSeriesDialog.setWindowTitle(_translate("MultipleSeriesDialog", "Dialog"))
+        MultipleSeriesDialog.setWindowTitle(_translate("MultipleSeriesDialog", "pyRECONSTRUCT"))
         self.questionLabel.setText(_translate("MultipleSeriesDialog", "You have selected multiple series. Do these series have differing alignments or attributes?"))
         self.noButton.setText(_translate("MultipleSeriesDialog", "No"))
         self.yesButton.setText(_translate("MultipleSeriesDialog", "Yes"))
@@ -739,7 +739,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "pyRECONSTRUCT Resolution Window"))
         self.changeSeriesButton.setText(_translate("MainWindow", "Change Series..."))
         self.unresolvedLabel.setText(_translate("MainWindow", "Unresolved Potential Duplicates"))
         self.resolveButton.setText(_translate("MainWindow", "Resolve Selected"))
@@ -1371,7 +1371,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "pyRECONSTRUCT Resolution Selection"))
         self.resolveLabel.setText(_translate("Dialog", "Resolve Duplicate Contours"))
         self.saveChangesButton.setText(_translate("Dialog", "Save"))
         self.cancelButton.setText(_translate("Dialog", "Cancel"))
