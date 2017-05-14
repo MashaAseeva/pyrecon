@@ -263,31 +263,29 @@ class Ui_loadDialog(object):
         self.welcomeLabel.setMaximumSize(QtCore.QSize(16777215, 20))
         self.welcomeLabel.setObjectName("welcomeLabel")
         self.verticalLayout_3.addWidget(self.welcomeLabel)
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.horizontalLayout_x = QtWidgets.QHBoxLayout()
         self.loadLineEdit = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.loadLineEdit.setObjectName("loadLineEdit")
         self.loadLineEdit.setReadOnly(True)
-        self.horizontalLayout_3.addWidget(self.loadLineEdit)
+        self.horizontalLayout_x.addWidget(self.loadLineEdit)
         self.loadSeriesButton = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.loadSeriesButton.setObjectName("loadSeriesButton")
-        self.horizontalLayout_3.addWidget(self.loadSeriesButton)
-        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
+        self.horizontalLayout_x.addWidget(self.loadSeriesButton)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_x)
         self.gridLayout.addLayout(self.verticalLayout_3, 0, 0, 1, 1)
         self.addSeriesButton = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.addSeriesButton.setObjectName("addSeriesButton")
         self.gridLayout.addWidget(self.addSeriesButton, 1, 0, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout)
         self.verticalLayout.addLayout(self.verticalLayout_2)
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.horizontalLayout_y = QtWidgets.QHBoxLayout()
         self.cancelButton = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.cancelButton.setObjectName("cancelButton")
-        self.horizontalLayout_4.addWidget(self.cancelButton)
+        self.horizontalLayout_y.addWidget(self.cancelButton)
         self.selectButton = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.selectButton.setObjectName("selectButton")
-        self.horizontalLayout_4.addWidget(self.selectButton)
-        self.verticalLayout.addLayout(self.horizontalLayout_4)
+        self.horizontalLayout_y.addWidget(self.selectButton)
+        self.verticalLayout.addLayout(self.horizontalLayout_y)
 
         self.retranslateUi(loadDialog)
         self.loadSeriesButton.clicked.connect(loadDialog.loadSeries)
@@ -318,13 +316,6 @@ class loadJsonSeriesDialog(QtWidgets.QDialog):
 
     def loadSeries(self):
         fileName = QtWidgets.QFileDialog.getOpenFileName(self, "Open Series", "/home/", "Series File (*.ser)")
-        if fileName != None:
-            if (self.sender().objectName() == 'loadSeriesButton'):
-                self.ui.loadLineEdit.setText(str(fileName[0]))
-            else:
-                number = (self.sender().objectName())[-1]
-                getattr(self.ui, 'loadLineEdit_'+str(self.counter)).setText(str(fileName[0]))
-                self.fileList[int(number)] = str(fileName[0])
 
         if fileName != None:
 
@@ -367,7 +358,7 @@ class loadJsonSeriesDialog(QtWidgets.QDialog):
         self.ui.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 381, 281+(30*(self.counter))))
         self.resize(400, 300 + (30*(self.counter)))
 
-        self.ui.verticalLayout_3.addLayout(getattr(self.ui, 'horizontalLayout_'+str(self.counter+5)))
+        self.ui.verticalLayout_3.addLayout(getattr(self.ui, 'horizontalLayout_'+str(self.counter)))
 
 
 
@@ -657,9 +648,6 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName("gridLayout")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.changeSeriesButton = QtWidgets.QPushButton(self.gridLayoutWidget)
-        self.changeSeriesButton.setObjectName("changeSeriesButton")
-        self.verticalLayout_2.addWidget(self.changeSeriesButton)
         self.unresolvedLabel = QtWidgets.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Helvetica")
@@ -741,8 +729,6 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-        self.actionChange_Series = QtWidgets.QAction(MainWindow)
-        self.actionChange_Series.setObjectName("actionChange_Series")
         self.actionSave_Resolutions = QtWidgets.QAction(MainWindow)
         self.actionSave_Resolutions.setObjectName("actionSave_Resolutions")
         self.actionResolve_all_Left = QtWidgets.QAction(MainWindow)
@@ -755,7 +741,6 @@ class Ui_MainWindow(object):
         self.actionView_All.setObjectName("actionView_All")
         self.actionExit = QtWidgets.QAction(MainWindow)
         self.actionExit.setObjectName("actionExit")
-        self.menuFile.addAction(self.actionChange_Series)
         self.menuFile.addAction(self.actionSave_Resolutions)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
@@ -765,9 +750,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuEdit.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.changeSeriesButton.clicked.connect(MainWindow.loadSeries)
         self.resolveButton.clicked.connect(MainWindow.loadResolveLeft)
-        self.actionChange_Series.triggered.connect(MainWindow.loadSeries)
         self.transferAllButton.clicked.connect(MainWindow.transferAllRight)
         self.transferLeftButton.clicked.connect(MainWindow.transferFromLeft)
         self.transferRightButton.clicked.connect(MainWindow.transferFromRight)
@@ -785,7 +768,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "pyRECONSTRUCT Resolution Window"))
-        self.changeSeriesButton.setText(_translate("MainWindow", "Change Series..."))
         self.unresolvedLabel.setText(_translate("MainWindow", "Unresolved Potential Duplicates"))
         self.resolveButton.setText(_translate("MainWindow", "Resolve Selected"))
         self.transferLeftButton.setText(_translate("MainWindow", "Transfer >>"))
@@ -797,7 +779,6 @@ class Ui_MainWindow(object):
         self.completeButton.setText(_translate("MainWindow", "Resolve Complete"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
-        self.actionChange_Series.setText(_translate("MainWindow", "Change Series..."))
         self.actionSave_Resolutions.setText(_translate("MainWindow", "Save Resolutions"))
         self.actionResolve_all_Left.setText(_translate("MainWindow", "Resolve All (Left)"))
         self.actionResolve_all_Right.setText(_translate("MainWindow", "Resolve All (Right)"))
@@ -807,12 +788,24 @@ class Ui_MainWindow(object):
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self, data, fileList):
+    def __init__(self, data, fileList, app):
         super(MainWindow, self).__init__()
         self.fileList = fileList
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.initializeDataset(data)
+        self.app = app
+
+    def closeEvent(self, event):
+
+        quit_msg = "Are you sure you want to exit the program?"
+        reply = QtWidgets.QMessageBox.question(self, 'Message', 
+                         quit_msg, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+
+        if reply == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
 
     def initializeDataset(self, data):
         # Convert string keys to ints
@@ -894,8 +887,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.unresolvedView.doubleClicked.connect(self.loadResolveLeft)
         self.ui.resolvedView.doubleClicked.connect(self.loadResolveRight)
 
-    def loadSeries(self):
-        print("load series")
 
     def transferAllRight(self):
         rowCount = self.ui.unresolvedModel.rowCount()
@@ -952,6 +943,10 @@ class MainWindow(QtWidgets.QMainWindow):
             nextItemIndex = self.ui.unresolvedModel.index(0, 0)
             nextItem = self.ui.unresolvedModel.itemFromIndex(nextItemIndex)
             resolution = resolveDialog(nextItem)
+
+            if (resolution.result() == 0):
+                break
+            
             resoMarker = resolution.DialogCode()
 
             if resoMarker:
@@ -961,8 +956,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.resolvedView.update()
         self.ui.unresolvedView.update()
 
-    def saveSeries(self):
-        print ("save series")
+
+    def saveSeries(self, app):
+
+        #add splash screen
+        splash_pix = QtGui.QPixmap('loading2.gif')
+        splash = QtWidgets.QSplashScreen(splash_pix, QtCore.Qt.WindowStaysOnTopHint)
+        progressBar = QtWidgets.QProgressBar(splash)
+        progressBar.setMinimum(0)
+        splash.setMask(splash_pix.mask())
+        splash.show()
+
+        i = 0
+        progressBar.setValue(i)
+
+        progressBar.setMaximum(7)
+
         outputDict = {
             "series": self.fileList,
             "sections": {}
@@ -974,6 +983,10 @@ class MainWindow(QtWidgets.QMainWindow):
             "exact": [],
             "section": 0
         }
+
+        i = 1
+        progressBar.setValue(i)
+        self.app.processEvents()
 
         for idx in range (0, self.ui.unresolvedModel.rowCount()):
             nextItemIndex = self.ui.unresolvedModel.index(idx, 0)
@@ -1019,6 +1032,9 @@ class MainWindow(QtWidgets.QMainWindow):
                     outputDict["sections"][next_section]["exact"].append(
                         nextItem.data())
 
+        i = 2
+        progressBar.setValue(i)
+        self.app.processEvents()
 
         for idx in range (0, self.ui.resolvedModel.rowCount()):
             nextItemIndex = self.ui.resolvedModel.index(idx, 0)
@@ -1064,18 +1080,38 @@ class MainWindow(QtWidgets.QMainWindow):
                     outputDict["sections"][next_section]["exact"].append(
                         nextItem.data())
 
+        i = 3
+        progressBar.setValue(i)
+        self.app.processEvents()
+
         save_dir = os.path.join(self.fileList[0] if os.path.isdir(self.fileList[0]) \
                    else os.path.dirname(self.fileList[0]), "merged")
+
+        i = 4
+        progressBar.setValue(i)
+        self.app.processEvents()
+
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
+
+        i = 5
+        progressBar.setValue(i)
+        self.app.processEvents()
 
         with open(os.path.join(save_dir, "savedstatus.json"), "w") as f:
             json.dump(outputDict, f)
 
+        i = 6
+        progressBar.setValue(i)
+        self.app.processEvents()
+        splash.close()
+
         if (self.sender().objectName() == "completeButton"):
-            self.close()
             write_merged_series(outputDict)
+            self.close()
             return (outputDict, self.fileList)
+        
+
 
     def loadResolveLeft(self):
         selected = self.ui.unresolvedView.selectedIndexes()
@@ -1248,7 +1284,7 @@ class resolveDialog(QtWidgets.QDialog):
                 pixmap = (QtGui.QPixmap(self.itemData[i]["image"]))
 
             pixmap = pixmap.copy(*(self.itemData[i]['rect']))
-            print(self.itemData[i]['rect'])
+            #print(self.itemData[i]['rect'])
 
             preCropSize = pixmap.size()
 
@@ -1297,7 +1333,6 @@ class resolveDialog(QtWidgets.QDialog):
                     self.itemData[i]['keepBool'] = False
 
     def updateContour(self, item):
-        print ("update contour")
         self.updatedState = True
 
 
@@ -1602,24 +1637,40 @@ def startLoadDialogs():
                 for i in range (0, len(fileList)):
                     if len (fileList[i]) == 0:
                         fileList.pop(i)
-                jsonData = start_database(fileList, app)
+                if len(fileList) == 0:
+                    app.quit()
+                else:
+                    jsonData = start_database(fileList, app)
 
     #restoring from JSON
     elif (len(initialWindow.returnFileList()) > 0):
         jsonList =  (initialWindow.returnFileList())
-        loadSeries = loadJsonSeriesDialog()
-        fileList = loadSeries.fileList
 
-        if len(fileList) == 0:
+        if len(jsonList) == 0:
             app.quit()
 
-        for i in range (0, len(fileList)):
-            if len (fileList[i]) == 0:
-                fileList.pop(i)
-        jsonData = json.load(open(str(jsonList[0])))
+        for i in range (0, len(jsonList)):
+            if len (jsonList[i]) == 0:
+                jsonList.pop(i)
+        if len(jsonList) == 0:
+            app.quit()
+        else:
+            loadSeries = loadJsonSeriesDialog()
+            fileList = loadSeries.fileList
+
+            if len(fileList) == 0:
+                app.quit()
+
+            for i in range (0, len(fileList)):
+                if len (fileList[i]) == 0:
+                    fileList.pop(i)
+            if len(fileList) == 0:
+                app.quit()
+            else:
+                jsonData = json.load(open(str(jsonList[0])))
 
     if 'jsonData' in locals():
-        mainWindow = MainWindow(jsonData, fileList)
+        mainWindow = MainWindow(jsonData, fileList, app)
         mainWindow.show()
 
         app.exec_()
